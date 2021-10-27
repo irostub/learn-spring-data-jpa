@@ -13,7 +13,7 @@ import javax.persistence.QueryHint;
 import java.util.List;
 
 @Repository
-public interface MemberRepository extends JpaRepository<Member, Long> {
+public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom {
     List<Member> findByUsernameAndAgeGreaterThan(String username, int age);
 
     //@Query 선언 없이 메서드 명으로 네임드 쿼리 호출
@@ -61,11 +61,9 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query("select m from Member m")
     List<Member> findWithLockBy();
 
-
-
-    //count 쿼리와 select 쿼리를 분할하여 적용 가능
-    //최적화 시 count 가 수많은 조인을 탈 필요는 없을 때 필요, 최적화
-    /*@Query(value="select m from Member m where m.age>=:age",
+    /*count 쿼리와 select 쿼리를 분할하여 적용 가능
+    최적화 시 count 가 수많은 조인을 탈 필요는 없을 때 필요, 최적화
+    @Query(value="select m from Member m where m.age>=:age",
             countQuery ="select count(m) from Member m where m.age>=:age")
     Page<Member> findByAgeGreaterThanEqual(int age, Pageable pageable);*/
 }
